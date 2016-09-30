@@ -12,5 +12,5 @@
     USING Extractors.Tsv();
 
 OUTPUT @searchlog   
-    TO "./output/searchLog.csv"
-      USING Outputters.Csv();
+    TO "./searchLog.csv"
+      USING Outputters.Csv(quoting: true);
