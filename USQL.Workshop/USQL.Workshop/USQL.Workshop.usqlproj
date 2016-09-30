@@ -23,8 +23,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Script Include="1-TransformToCsv.usql" />
+    <Script Include="2-FilterData.usql" />
     <ScriptCode Include="1-TransformToCsv.usql.cs">
       <DependentUpon>1-TransformToCsv.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="2-FilterData.usql.cs">
+      <DependentUpon>2-FilterData.usql</DependentUpon>
     </ScriptCode>
   </ItemGroup>
   <Import Project="$(AppData)\Microsoft\DataLake\MsBuild\1.0\Usql.targets" />
