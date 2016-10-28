@@ -1,0 +1,18 @@
+﻿DROP FUNCTION IF EXISTS VehicleData_Function;
+
+CREATE FUNCTION VehicleData_Function(@filePath string)
+RETURNS @result TABLE(vehicle_id int, entry_id long, event_date DateTime, latitude float, longitude float, speed int, direction string, trip_id int?)
+AS
+BEGIN
+    @result =
+        EXTRACT vehicle_id int,
+                entry_id long,
+                event_date DateTime,
+                latitude float,
+                longitude float,
+                speed int,
+                direction string,
+                trip_id int?
+        FROM @filePath
+        USING Extractors.Csv();
+END;

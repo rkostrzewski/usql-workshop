@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>f711216f-d8e1-49d4-b276-b6f7d53b3a68</ProjectGuid>
+    <OutputType>File</OutputType>
+    <AssemblyName>Algebra.xml</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <Name>USQLWorkshopScripts</Name>
+    <RootNamespace>USQLWorkshopScripts</RootNamespace>
+    <RuntimeVersion>default</RuntimeVersion>
+    <OutputStreamPath>D:\usql-workshop\Output</OutputStreamPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Script Include="1-TransformToCsv.usql" />
+    <Script Include="2-FilterData.usql" />
+    <Script Include="3-TransformData.usql" />
+    <Script Include="4 - Aggregations.usql" />
+    <Script Include="5 - Ambulance.usql" />
+    <Script Include="5 - Ambulance\5.0 - Create Assembly.usql" />
+    <Script Include="5 - Ambulance\5.1 - Drivers View.usql" />
+    <Script Include="5 - Ambulance\5.2 - Vehicle Data UDF.usql" />
+    <Script Include="5 - Ambulance\5.3 - Vehicle Trips UDF.usql" />
+    <Script Include="5 - Ambulance\5.5 - Query Data.usql" />
+    <ScriptCode Include="1-TransformToCsv.usql.cs">
+      <DependentUpon>1-TransformToCsv.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="2-FilterData.usql.cs">
+      <DependentUpon>2-FilterData.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="3-TransformData.usql.cs">
+      <DependentUpon>3-TransformData.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="4 - Aggregations.usql.cs">
+      <DependentUpon>4 - Aggregations.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="5 - Ambulance.usql.cs">
+      <DependentUpon>5 - Ambulance.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="5 - Ambulance\5.0 - Create Assembly.usql.cs">
+      <DependentUpon>5 - Ambulance\5.0 - Create Assembly.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="5 - Ambulance\5.1 - Drivers View.usql.cs">
+      <DependentUpon>5 - Ambulance\5.1 - Drivers View.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="5 - Ambulance\5.2 - Vehicle Data UDF.usql.cs">
+      <DependentUpon>5 - Ambulance\5.2 - Vehicle Data UDF.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="5 - Ambulance\5.3 - Vehicle Trips UDF.usql.cs">
+      <DependentUpon>5 - Ambulance\5.3 - Vehicle Trips UDF.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="5 - Ambulance\5.5 - Query Data.usql.cs">
+      <DependentUpon>5 - Ambulance\5.5 - Query Data.usql</DependentUpon>
+    </ScriptCode>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="5 - Ambulance\" />
+  </ItemGroup>
+  <Import Project="$(AppData)\Microsoft\DataLake\MsBuild\1.0\Usql.targets" />
+</Project>

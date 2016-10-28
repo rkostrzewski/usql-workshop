@@ -1,0 +1,15 @@
+﻿DROP VIEW IF EXISTS Drivers_View;
+
+CREATE VIEW Drivers_View
+AS
+ EXTRACT driver_id int
+       , name string
+       , street string
+	   , city string
+       , region string
+       , zipcode  string
+       , country  string
+       , phone_numbers  string
+ FROM "../../../SampleData/Vehicles/Drivers.txt"
+ USING Extractors.Tsv(encoding: Encoding.Unicode);
+ 

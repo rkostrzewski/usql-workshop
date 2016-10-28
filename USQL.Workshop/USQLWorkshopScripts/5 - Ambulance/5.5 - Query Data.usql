@@ -1,0 +1,45 @@
+﻿DECLARE @DRIVER_TRIPS string = @"..\..\SampleData\Vehicles\DriverShiftTrips.csv";
+DECLARE @VEHICLE_DATA string = @"D:\usql-workshop\SampleData\Vehicles\vehicle{*}.csv"; // To jest zjebane, Mike Ross mowi, ze dziala, a nie ziala
+
+@driverTripsPerDay =
+    SELECT d.driver_id,
+           d.name,
+           vt.vehicle_id,
+           vt.date,
+           t.trip_id
+    FROM Drivers_View AS d
+         JOIN
+             VehicleTrips_Function
+             (
+                 @DRIVER_TRIPS
+             ) AS vt
+         ON vt.driver_id == d.driver_id
+         CROSS APPLY
+             EXPLODE(vt.trip_ids) AS t(trip_id);
+
+@result =
+    SELECT dt.name,
+           SUM(vd.speed * 3.0 / 3600) AS distance
+    FROM @driverTripsPerDay AS dt
+         JOIN
+         (
+         SELECT d.trip_id.Value AS trip_id,
+                d.speed,
+                d.event_date.Date AS event_date,
+                d.vehicle_id
+         FROM VehicleData_Function
+              (
+                  @VEHICLE_DATA
+              ) AS d
+         WHERE d.trip_id.HasValue == true
+         ) AS vd
+         ON vd.trip_id == dt.trip_id AND vd.vehicle_id == dt.vehicle_id AND dt.date == vd.event_date
+    GROUP BY dt.name;
+
+         
+         
+
+OUTPUT @result 
+TO "c2.csv"
+ORDER BY distance DESC
+ USING Outputters.Csv(quoting: true);
