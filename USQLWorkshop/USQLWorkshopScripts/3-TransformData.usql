@@ -16,14 +16,31 @@ DECLARE @inputFile string = @"../../Output/searchLog.csv";
 // Output set should look like this:
 // UserId, Start      , Query    , Duration, UrlsArray                     , ClickedUrlsArray
 // 1     , 2016-08-30 , "usql"   , 10      , ["wikipedia.com", "bbc.co.uk"], ["wikipedia.com"]
-@expandedData = ???
+@expandedData = 
+    SELECT UserId,
+           Start,
+           Query,
+           Duration,
+           new SQL.ARRAY<string>(Urls.Split(';')) AS UrlsArray,
+           new SQL.ARRAY<string>(ClickedUrls.Split(';')) AS ClickedUrlsArray
+    FROM @searchlog;
 
 // Transform previously created set to look like this:
 // UserId, Start      , Query    , Duration, Url            , WasClicked
 // 1     , 2016-08-30 , "usql"   , 10      , "wikipedia.com", true
 // 1     , 2016-08-30 , "usql"   , 10      , "bbc.co.uk"    , false
 // HINT use: CROSS APPLY EXPLODE
-@transformedSearchLogData = ???
+@transformedSearchLogData = 
+    SELECT UserId,
+           Start,
+           Query,
+           Duration,
+           url AS Url,
+           // IEnumerable.Any(Lambda)
+           ClickedUrlsArray.Any(c => c.Equals(url, StringComparison.InvariantCultureIgnoreCase)) AS WasClicked
+    FROM @expandedData
+         CROSS APPLY
+             EXPLODE(UrlsArray) AS UA(url);
                   
 OUTPUT @transformedSearchLogData 
     TO "./transformedSearchLogData.csv"
