@@ -1,0 +1,42 @@
+﻿DECLARE @inputFile string = @"../../Output/searchLog.csv";
+
+@searchlog =
+     EXTRACT UserId          int,
+            Start           DateTime,
+            Region          string,
+            Query           string,
+            Duration        int?,
+            Urls            string,
+            ClickedUrls     string
+    FROM @inputFile
+    USING Extractors.Csv();
+
+@combined =
+    SELECT UserId,
+           ARRAY_AGG(Query) AS Queries,
+           Duration
+    FROM @searchlog
+    GROUP BY UserId,
+             Start,
+             Query,
+             Duration;
+@combined =
+    SELECT UserId,
+           string.Join(";", Queries) AS CombinedQueries,
+           Duration
+    FROM @combined;
+
+@mostExpensiveUsers =
+    SELECT UserId,
+           SUM(Duration) AS AllQueriesDuration,
+           string.Join(";", ARRAY_AGG(CombinedQueries)) AS AllQueriesUrls
+    FROM @combined
+    GROUP BY UserId
+    HAVING SUM(Duration) > 200
+    ORDER BY AllQueriesDuration DESC
+    FETCH 10 ROWS;
+             
+                  
+OUTPUT @mostExpensiveUsers 
+    TO "./mostExpensiveUsers.csv"
+      USING Outputters.Csv(quoting: true);

@@ -1,0 +1,20 @@
+﻿DECLARE @inputFile string = @"../../Output/searchLog.csv";
+
+@searchlog =
+    EXTRACT UserId          int,
+            Start           DateTime,
+            Region          string,
+            Query           string,
+            Duration        int?,
+            Urls            string,
+            ClickedUrls     string
+    FROM @inputFile
+    USING Extractors.Csv();
+
+@searchesWithWikipediaAsResultUrl = SELECT * 
+    FROM @searchlog 
+    WHERE Urls.Contains("wikipedia");
+
+OUTPUT @searchesWithWikipediaAsResultUrl   
+    TO "./searchesWithWikipediaAsResultUrl.csv"
+      USING Outputters.Csv(quoting: true);

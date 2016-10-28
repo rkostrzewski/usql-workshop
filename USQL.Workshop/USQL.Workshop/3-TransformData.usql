@@ -1,0 +1,38 @@
+﻿DECLARE @inputFile string = @"../../Output/searchLog.csv";
+
+@searchlog =
+    EXTRACT UserId          int,
+            Start           DateTime,
+            Region          string,
+            Query           string,
+            Duration        int?,
+            Urls            string,
+            ClickedUrls     string
+    FROM @inputFile
+    USING Extractors.Csv();
+
+@expandedData =
+    SELECT UserId,
+           Start,
+           Query,
+           new SQL.ARRAY<string>(Urls.Split(';')) AS UrlsArray,
+           new SQL.ARRAY<string>(ClickedUrls.Split(';')) AS ClickedUrlsArray
+           // or ClickedUrls <string>
+    FROM @searchlog;
+
+@transformedSearchLogData =
+    SELECT UserId,
+           Start,
+           Query,
+           url AS Url,
+           // Array.Any(Lambda)
+           ClickedUrlsArray.Any(c => c.Equals(url, StringComparison.InvariantCultureIgnoreCase)) AS WasClicked
+           // or ClickedUrls.Conains(url) <string>.Contains(string)
+    FROM @expandedData
+         CROSS APPLY
+             EXPLODE(UrlsArray) AS UA(url);
+             
+                  
+OUTPUT @transformedSearchLogData 
+    TO "./transformedSearchLogData.csv"
+      USING Outputters.Csv(quoting: true);

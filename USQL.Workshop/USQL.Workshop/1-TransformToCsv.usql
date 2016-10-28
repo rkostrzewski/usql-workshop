@@ -1,0 +1,16 @@
+﻿DECLARE @inputFile string = @"../../SampleData/SearchLog.tsv";
+
+@searchlog =
+    EXTRACT UserId          int,
+            Start           DateTime,
+            Region          string,
+            Query           string,
+            Duration        int?,
+            Urls            string,
+            ClickedUrls     string
+    FROM @inputFile
+    USING Extractors.Tsv();
+
+OUTPUT @searchlog   
+    TO "./searchLog.csv"
+      USING Outputters.Csv(quoting: true);
