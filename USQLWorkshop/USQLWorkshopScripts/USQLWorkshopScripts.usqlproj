@@ -26,6 +26,11 @@
     <Script Include="2-FilterData.usql" />
     <Script Include="3-TransformData.usql" />
     <Script Include="4-Aggregations.usql" />
+    <Script Include="Step5\0-Create Assembly.usql" />
+    <Script Include="Step5\1-Drivers_View.usql" />
+    <Script Include="Step5\2-VehicleData_UDF.usql" />
+    <Script Include="Step5\3-VehicleTrips_UDF.usql" />
+    <Script Include="Step5\4-VehicleQuery.usql" />
   </ItemGroup>
   <ItemGroup>
     <ScriptCode Include="1-TransformToCsv.usql.cs">
@@ -40,6 +45,24 @@
     <ScriptCode Include="4-Aggregations.usql.cs">
       <DependentUpon>4-Aggregations.usql</DependentUpon>
     </ScriptCode>
+    <ScriptCode Include="Step5\0-Create Assembly.usql.cs">
+      <DependentUpon>Step5\0-Create Assembly.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Step5\1-Drivers_View.usql.cs">
+      <DependentUpon>Step5\1-Drivers_View.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Step5\2-VehicleData_UDF.usql.cs">
+      <DependentUpon>Step5\2-VehicleData_UDF.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Step5\3-VehicleTrips_UDF.usql.cs">
+      <DependentUpon>Step5\3-VehicleTrips_UDF.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Step5\4-VehicleQuery.usql.cs">
+      <DependentUpon>Step5\4-VehicleQuery.usql</DependentUpon>
+    </ScriptCode>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Step5" />
   </ItemGroup>
   <Import Project="$(AppData)\Microsoft\DataLake\MsBuild\1.0\Usql.targets" />
 </Project>

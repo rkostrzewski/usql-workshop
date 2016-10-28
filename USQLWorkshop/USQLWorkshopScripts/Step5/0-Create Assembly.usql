@@ -1,0 +1,3 @@
+﻿DROP ASSEMBLY IF EXISTS USQLWorkshopCode;
+
+CREATE ASSEMBLY USQLWorkshopCode FROM @"..\..\USQLWorkshopCode\bin\Debug\USQLWorkshopCode.dll";

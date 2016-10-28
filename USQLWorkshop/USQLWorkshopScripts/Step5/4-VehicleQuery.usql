@@ -1,0 +1,38 @@
+﻿DECLARE @DRIVER_TRIPS string = @"..\..\SampleData\Vehicles\DriverShiftTrips.csv";
+// Update this path because it's absolute.
+// You can use different matches in filename, and even can map them to columns, e.g. vehicle_{id:*}_{date:*}.csv
+DECLARE @VEHICLE_DATA string = @"D:\usql-workshop\SampleData\Vehicles\vehicle{*}.csv";
+
+@driverTripsPerDay =
+    SELECT d.driver_id,
+           d.name,
+           vt.vehicle_id,
+           vt.date,
+           t.trip_id
+    FROM Drivers_View AS d
+         JOIN
+             VehicleTrips_Function
+             (
+                 @DRIVER_TRIPS
+             ) AS vt
+         ON vt.driver_id == d.driver_id
+         CROSS APPLY
+             EXPLODE(vt.trip_ids) AS t(trip_id);
+
+@result =
+    SELECT dt.name,
+           ??? AS distance
+    FROM @driverTripsPerDay AS dt
+         JOIN
+         (
+            ???
+         ) AS vd // vd - vehicle data
+         ON vd.trip_id == dt.trip_id // vd.trip_id must be of int type not int? - you can only compare same types
+            AND dt.date == vd.event_date // vd.event_date must be contain date without time, because dt.date does not contain time. You can only use columns in joins so vd.event_date.Date won't work.
+            AND vd.vehicle_id == dt.vehicle_id
+    ???
+
+OUTPUT @result
+TO "drivers.csv"
+ORDER BY distance DESC
+USING Outputters.Csv(quoting : true);

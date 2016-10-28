@@ -1,0 +1,26 @@
+﻿DROP FUNCTION IF EXISTS VehicleTrips_Function;
+
+CREATE FUNCTION VehicleTrips_Function(@filePath string)
+RETURNS @result TABLE(date DateTime, driver_id int, vehicle_id int, trip_ids SqlArray<int>)
+AS
+BEGIN
+    // Include assembly
+    REFERENCE ASSEMBLY USQLWorkshopCode;
+    USING VehicleTripsParser = USQLWorkshopCode.VehicleTripsParser;
+
+    @data =
+        EXTRACT date DateTime,
+                driver_id int,
+                vehicle_id int,
+                trips string
+        FROM @filePath
+        USING Extractors.Text(quoting : true);
+
+    @result =
+        SELECT date,
+               driver_id,
+               vehicle_id,
+               // Custom C# function!
+               VehicleTripsParser.SplitAndParseAsInt(trips, ',') AS trip_ids
+        FROM @data;
+END;
