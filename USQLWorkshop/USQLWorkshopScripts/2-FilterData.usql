@@ -11,11 +11,12 @@ DECLARE @inputFile string = @"../../Output/searchLog.csv";
             ClickedUrls     string
     FROM @inputFile
     USING Extractors.Csv();
-
-// TODO
+//TODO
 // Find all wikipedia urls and store them in 
 // @searchesWithWikipediaAsResultUrl
-@searchesWithWikipediaAsResultUrl = ??? 
+@searchesWithWikipediaAsResultUrl = SELECT * 
+    FROM @searchlog 
+    WHERE Urls.Contains("wikipedia");
 
 OUTPUT @searchesWithWikipediaAsResultUrl   
     TO "./searchesWithWikipediaAsResultUrl.csv"
