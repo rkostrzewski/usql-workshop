@@ -1,0 +1,22 @@
+﻿// This is output file from previous step
+DECLARE @inputFile string = @"../../Output/searchLog.csv";
+
+@searchlog =
+    EXTRACT UserId          int,
+            Start           DateTime,
+            Region          string,
+            Query           string,
+            Duration        int?,
+            Urls            string,
+            ClickedUrls     string
+    FROM @inputFile
+    USING Extractors.Csv();
+
+// TODO
+// Find all wikipedia urls and store them in 
+// @searchesWithWikipediaAsResultUrl
+@searchesWithWikipediaAsResultUrl = ??? 
+
+OUTPUT @searchesWithWikipediaAsResultUrl   
+    TO "./searchesWithWikipediaAsResultUrl.csv"
+      USING Outputters.Csv(quoting: true);
