@@ -1,0 +1,28 @@
+﻿/* STEP 1:
+ * Set Data Lake DataRoot to Output folder
+ * Data Lake -> Options & Settings
+ * Change DataRoot setting to
+ * repo-root\Output
+ */
+ 
+DECLARE @inputFile string = @"../../SampleData/SearchLog.tsv";
+
+@searchlog =
+    // EXTRACT - like SELECT in SQL but used when dealing with file
+    // notice .NET data types
+    EXTRACT UserId          int,
+            Start           DateTime,
+            Region          string,
+            Query           string,
+            Duration        int?,
+            Urls            string,
+            ClickedUrls     string
+    FROM @inputFile // just a string providing file path
+    // Extractor that knows how to deal with file, e.g. 
+    // Extractors.Tsv, Extractors.Csv, custom JSON extractor, XML etc.
+    USING Extractors.Tsv();
+    
+// Output is used to save data to file
+OUTPUT @searchlog   
+    TO "./searchLog.csv"
+      USING Outputters.Csv(quoting: true);
