@@ -22,17 +22,18 @@ DECLARE @inputFile string = @"../../Output/searchLog.csv";
 // would become one row = [1, 2, 3] when grouped.
 @combined =
     SELECT UserId,
-           ARRAY_AGG(???) AS AggregatedQueries,
-           SUM(???) AS AllQueriesDuration       
-    FROM @searchlog                             
-    ???
+           SUM(Duration) AS AllQueriesDuration,
+           ARRAY_AGG(Query) AS AggregatedQueries
+    FROM @searchlog
+    GROUP BY UserId
+    HAVING SUM(Duration) > 200;
 
 // Select top 10 users with longest aggregated durations of their queries,
 // along with all their queries seperated with ;
 @mostExpensiveUsers =
     SELECT UserId,
            AllQueriesDuration,
-           ??? AS AllQueries
+           string.Join(";", AggregatedQueries) AS AllQueries
     FROM @combined
     ORDER BY AllQueriesDuration DESC
     FETCH 10 ROWS;
