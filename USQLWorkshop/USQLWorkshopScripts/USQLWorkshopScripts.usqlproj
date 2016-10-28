@@ -25,6 +25,7 @@
     <Script Include="1-TransformToCsv.usql" />
     <Script Include="2-FilterData.usql" />
     <Script Include="3-TransformData.usql" />
+    <Script Include="4-Aggregations.usql" />
   </ItemGroup>
   <ItemGroup>
     <ScriptCode Include="1-TransformToCsv.usql.cs">
@@ -35,6 +36,9 @@
     </ScriptCode>
     <ScriptCode Include="3-TransformData.usql.cs">
       <DependentUpon>3-TransformData.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="4-Aggregations.usql.cs">
+      <DependentUpon>4-Aggregations.usql</DependentUpon>
     </ScriptCode>
   </ItemGroup>
   <Import Project="$(AppData)\Microsoft\DataLake\MsBuild\1.0\Usql.targets" />

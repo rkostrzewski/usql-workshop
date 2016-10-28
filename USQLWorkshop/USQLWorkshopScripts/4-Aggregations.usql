@@ -1,0 +1,43 @@
+﻿// This is output file from first step
+DECLARE @inputFile string = @"../../Output/searchLog.csv";
+
+@searchlog =
+     EXTRACT UserId          int,
+            Start           DateTime,
+            Region          string,
+            Query           string,
+            Duration        int?,
+            Urls            string,
+            ClickedUrls     string
+    FROM @inputFile
+    USING Extractors.Csv();
+
+// 
+// Select UserIds, along with all their queries aggregated as SqlArray and their duration as whole.
+// Exclude results with aggregated duration smaller than 200
+// HINT: ARRAY_AGG - aggregates results into SqlArray, e.g. rows:
+// 1
+// 2
+// 3
+// would become one row = [1, 2, 3] when grouped.
+@combined =
+    SELECT UserId,
+           ARRAY_AGG(???) AS AggregatedQueries,
+           SUM(???) AS AllQueriesDuration       
+    FROM @searchlog                             
+    ???
+
+// Select top 10 users with longest aggregated durations of their queries,
+// along with all their queries seperated with ;
+@mostExpensiveUsers =
+    SELECT UserId,
+           AllQueriesDuration,
+           ??? AS AllQueries
+    FROM @combined
+    ORDER BY AllQueriesDuration DESC
+    FETCH 10 ROWS;
+             
+                  
+OUTPUT @mostExpensiveUsers 
+    TO "./mostExpensiveUsers.csv"
+      USING Outputters.Csv(quoting: true);
